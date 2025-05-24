@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "350378436571",
+    "project_id": "chat2gether-c2cbc",
+    "storage_bucket": "chat2gether-c2cbc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350378436571:android:c47fd72017fe70b6c2e9fe",
+        "android_client_info": {
+          "package_name": "com.example.chat2gether_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdl35dL7PjJcXV5jRoG04A1T_1u18SzLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
