@@ -2,69 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthView extends StatefulWidget {
-  const AuthView({super.key});
   @override
   State<AuthView> createState() => _AuthViewState();
 }
 
 class _AuthViewState extends State<AuthView> {
-  // VAR
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
   bool isLogin = true;
 
-  Future<void> _submit() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-
-    try{ // Login user or create account
-      if(isLogin){
-        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-      }else{
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+  void _submit() async {
+    try {
+      if (isLogin) {
+        await _auth.signInWithEmailAndPassword(
+            email: emailCtrl.text, password: passCtrl.text);
+      } else {
+        await _auth.createUserWithEmailAndPassword(
+            email: emailCtrl.text, password: passCtrl.text);
       }
-    }
-    catch(e){ // Error while trying to login or signup
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur : ${e.toString()}")));
+    } catch (e) {
+      print('Erreur: $e');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Erreur: $e')));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Center(child: Text("Authentification")),
-      ),
+      appBar: AppBar(title: Text(isLogin ? 'Login' : 'Register')),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: "Email"),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: "Password"),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-                onPressed: _submit,
-                child: Text(isLogin ? 'Se connecter' : 'Créer un compte'),
-            ),
+            TextField(controller: emailCtrl, decoration: InputDecoration(labelText: 'Email')),
+            TextField(controller: passCtrl, decoration: InputDecoration(labelText: 'Password'), obscureText: true),
+            ElevatedButton(onPressed: _submit, child: Text(isLogin ? 'Se connecter' : 'Créer un compte')),
             TextButton(
-                onPressed: () => setState(() {
+              child: Text(isLogin ? 'Créer un compte' : 'Se connecter'),
+              onPressed: () {
+                setState(() {
                   isLogin = !isLogin;
-                }),
-                child: Text(isLogin
-                    ? 'Créer un compte'
-                    : 'Déjà un compte ? Se connecter'),)
-              ]
-            ),
+                });
+              },
+            )
+          ],
+        ),
       ),
     );
   }
